@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proofofagent.com/schemas/metadata-v0.1.json",
+  "title": "AIP Metadata Manifest v0.1",
+  "description": "Off-chain metadata manifest for an Agent Identity Protocol registration",
+  "type": "object",
+  "required": ["aip_version", "agent", "configuration", "attestation"],
+  "properties": {
+    "aip_version": {
+      "type": "string",
+      "const": "0.1.0",
+      "description": "Protocol version"
+    },
+    "agent": {
+      "type": "object",
+      "required": ["name", "creator", "created_at"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable agent name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the agent's purpose"
+        },
+        "creator": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "description": "Ethereum address of the creator"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of creation"
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "required": ["system_prompt_hash", "model", "tools", "runtime"],
+      "properties": {
+        "system_prompt_hash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$",
+          "description": "Keccak256 hash of the full system prompt"
+        },
+        "model": {
+          "type": "object",
+          "required": ["provider", "identifier"],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "description": "Model provider (e.g., anthropic, openai)"
+            },
+            "identifier": {
+              "type": "string",
+              "description": "Model identifier (e.g., claude-opus-4-6)"
+            },
+            "version": {
+              "type": "string",
+              "description": "Model version string"
+            }
+          }
+        },
+        "tools": {
+          "type": "object",
+          "required": ["manifest_hash", "tool_count"],
+          "properties": {
+            "manifest_hash": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$",
+              "description": "Keccak256 hash of the ordered tool manifest"
+            },
+            "tool_count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of tools available to the agent"
+            },
+            "tool_names": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Human-readable list of tool names"
+            }
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "required": ["framework", "runtime_hash"],
+          "properties": {
+            "framework": {
+              "type": "string",
+              "description": "Agent framework (e.g., langchain, claude-code)"
+            },
+            "version": {
+              "type": "string",
+              "description": "Framework version"
+            },
+            "runtime_hash": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$",
+              "description": "Keccak256 hash of runtime metadata"
+            }
+          }
+        }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "required": ["tier"],
+      "properties": {
+        "tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Trust verification tier (1=self-reported, 2=platform-attested, 3=TEE, 4=ZK input, 5=verifiable inference)"
+        },
+        "platform_signature": {
+          "type": ["string", "null"],
+          "description": "Platform's cryptographic signature over the configuration (Tier 2+)"
+        },
+        "tee_report": {
+          "type": ["string", "null"],
+          "description": "TEE attestation report (Tier 3+)"
+        },
+        "zk_proof": {
+          "type": ["string", "null"],
+          "description": "Zero-knowledge proof (Tier 4+)"
+        }
+      }
+    },
+    "previous_config_hash": {
+      "type": ["string", "null"],
+      "pattern": "^0x[a-fA-F0-9]{64}$",
+      "description": "Hash of the previous configuration (null for genesis)"
+    }
+  }
+}
