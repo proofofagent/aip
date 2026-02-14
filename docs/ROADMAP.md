@@ -1,44 +1,47 @@
 # Roadmap — Agent Identity Protocol (AIP)
 
-## Current Status: Phase 1 — Foundation
+## Current Status: Phase 1 — Foundation (In Progress)
 
-### Phase 1: On-Chain Registry (NOW)
+### Phase 1: On-Chain Registry
 
 The minimal viable protocol. An agent can register its existence and update its configuration on-chain.
 
 #### Deliverables
 
-- [ ] **Registry smart contract** (`contracts/src/AgentRegistry.sol`)
+- [x] **Registry smart contract** (`contracts/src/AgentRegistry.sol`)
   - `register()` — genesis attestation
   - `registerWithAdmin()` — genesis with separate admin key
   - `updateConfig()` — configuration change record
   - `resolve()` — query current and historical state
   - `revoke()` — identity revocation with optional successor
-- [ ] **Contract tests** (`contracts/test/`)
+- [x] **Contract tests** (`contracts/test/`) — 20 tests, all passing
   - Registration (single agent, duplicate prevention)
   - Configuration updates (authorization, history preservation)
   - Resolution (current state, full history)
   - Revocation (authorization, successor linking)
   - Edge cases (zero address, empty hashes, gas optimization)
-- [ ] **Off-chain metadata schema** (`docs/schemas/metadata-v0.1.json`)
+- [x] **Off-chain metadata schema** (`docs/schemas/metadata-v0.1.json`)
   - JSON Schema for the metadata manifest
-  - Validation tooling
+- [x] **Testnet deployment** — Base Sepolia
+  - Registry: `0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97`
+  - Agent Zero self-registered: `0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072`
 - [ ] **SDK — Core** (`sdk/src/`)
   - Key pair generation and management
   - Configuration hashing (system prompt, model, tools, runtime)
   - Registration transaction builder
   - Resolution and verification client
-- [ ] **ERC Draft** (`docs/ERC_DRAFT.md`)
+- [ ] **ERC Draft** (`docs/ERC_DRAFT.md`) — drafted, needs review and submission
   - Following EIP-1 template
   - Abstract, Motivation, Specification, Rationale, Security Considerations
 - [ ] **Ethereum Magicians post**
   - Problem framing
   - Link to spec and reference implementation
   - Call for feedback
+- [ ] **Make repository public** — final review, then open source
 
 #### Success Criteria
-- Contract deployed to testnet (Sepolia or Base Sepolia)
-- At least one agent (this project's own agent!) registered with a valid identity chain
+- ~~Contract deployed to testnet~~ ✅ Base Sepolia
+- ~~At least one agent registered with a valid identity chain~~ ✅ Agent Zero
 - SDK can register, update, and resolve agent identities
 - ERC draft submitted and discussion thread active
 
@@ -84,6 +87,7 @@ Research and experimental implementations of stronger verification.
 Higher-order abstractions built on the identity primitive.
 
 #### Potential Extensions
+- **Human-agent relationship protocol** — explicit on-chain or off-chain records of human operators, supervisors, and approval workflows. Some agents will have human-in-the-loop for action approval; others will be fully autonomous. The identity registry should not mandate either pattern, but the ecosystem needs a standard way to express and verify these relationships. This could be a separate smart contract built on top of the identity primitive, not part of the core registry.
 - Permission grant protocol (cryptographically signed, scoped delegations)
 - Decision logging standard (agent action audit trails)
 - Reputation scoring framework
@@ -93,24 +97,23 @@ Higher-order abstractions built on the identity primitive.
 
 ---
 
-## Build Order (Phase 1)
+## Build Order (Phase 1 — Remaining)
 
-For the implementing agent, here's the recommended sequence:
-
-1. **Start with the contract.** It's the foundational primitive. Write `AgentRegistry.sol` and comprehensive tests.
-2. **Define the metadata schema.** Create the JSON Schema for off-chain manifests.
+1. ~~Start with the contract.~~ ✅
+2. ~~Define the metadata schema.~~ ✅
 3. **Build the SDK core.** Configuration hashing and registration transaction building.
-4. **Write the ERC draft.** The spec crystallizes the design and forces precision.
-5. **Deploy to testnet.** Get a live instance running.
-6. **Self-register.** Register this agent's own identity on the protocol. The recursive demonstration.
-7. **Draft the Ethereum Magicians post.** Frame the problem and invite community feedback.
+4. **Review and finalize the ERC draft.** The spec crystallizes the design and forces precision.
+5. ~~Deploy to testnet.~~ ✅
+6. ~~Self-register.~~ ✅
+7. **Make repo public.** Final review pass.
+8. **Draft the Ethereum Magicians post.** Frame the problem and invite community feedback.
 
 ## Decisions to Make
 
 Track these in `DECISIONS.md` as they arise:
 
-- Which L2 for initial testnet deployment?
-- Solidity version and compilation targets?
+- ~~Which L2 for initial testnet deployment?~~ ✅ Base Sepolia (ADR-005)
+- ~~Solidity version and compilation targets?~~ ✅ 0.8.24 (ADR-006)
 - IPFS vs Arweave for metadata storage in the reference implementation?
 - SDK language (TypeScript? Python? Both?)
 - How to handle metadata manifest versioning?
