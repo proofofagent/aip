@@ -25,11 +25,11 @@ The minimal viable protocol. An agent can register its existence and update its 
 - [x] **Testnet deployment** — Base Sepolia
   - Registry: `0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97`
   - Agent Zero self-registered: `0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072`
-- [ ] **SDK — Core** (`sdk/src/`)
-  - Key pair generation and management
+- [x] **SDK — Core** (`sdk/src/`)
   - Configuration hashing (system prompt, model, tools, runtime)
-  - Registration transaction builder
+  - Registration and config update transaction builders
   - Resolution and verification client
+  - TypeScript package scaffold with tests
 - [ ] **ERC Draft** (`docs/ERC_DRAFT.md`) — drafted, needs review and submission
   - Following EIP-1 template
   - Abstract, Motivation, Specification, Rationale, Security Considerations
@@ -101,7 +101,7 @@ Higher-order abstractions built on the identity primitive.
 
 1. ~~Start with the contract.~~ ✅
 2. ~~Define the metadata schema.~~ ✅
-3. **Build the SDK core.** Configuration hashing and registration transaction building.
+3. ~~Build the SDK core.~~ ✅
 4. **Review and finalize the ERC draft.** The spec crystallizes the design and forces precision.
 5. ~~Deploy to testnet.~~ ✅
 6. ~~Self-register.~~ ✅

@@ -36,7 +36,7 @@ This protocol's first registered agent is the one building it.
 | Address | `0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072` |
 | Chain | Base Sepolia |
 | Registry | `0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97` |
-| Config hash | `0x97e65c2548e0b4e42e4239a3f50291fcd25bf6bffd58d6acb7ed841083fd37fc` |
+| Config hash | `0xb9ad6d11451f23390e78c961f75d357325fc480945d95fea721eb7da4eb0c84f` |
 
 Verify on-chain: `cast call 0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97 "resolve(address)" 0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072 --rpc-url https://sepolia.base.org`
 
@@ -73,6 +73,48 @@ registry.resolve(agentKey);
 registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
 ```
 
+### Reusable Config Update Script
+
+Use the parameterized helper to compute a new config hash and optionally broadcast `updateConfig`:
+
+```bash
+# Dry-run (compute hashes, no tx)
+scripts/update_config.sh \
+  --model gpt-5 \
+  --tools "exec_command,write_stdin,apply_patch,update_plan" \
+  --runtime "codex-cli:0.101.0"
+
+# Broadcast on-chain update
+scripts/update_config.sh \
+  --model gpt-5 \
+  --tools "exec_command,write_stdin,apply_patch,update_plan" \
+  --runtime "codex-cli:0.101.0" \
+  --broadcast
+```
+
+The helper reads `~/.aip-agent/wallet.json` by default and executes `contracts/script/UpdateConfig.s.sol`.
+
+For a single command that computes, broadcasts, checks tx status, and verifies resolved on-chain hash:
+
+```bash
+scripts/update_and_verify.sh \
+  --model gpt-5.3-codex \
+  --tools "exec_command,write_stdin,..." \
+  --runtime "codex-cli:0.101.0"
+```
+
+### Blockchain Utility Scripts
+
+For reliable reads/verifications around updates, use:
+
+```bash
+scripts/rpc_call.sh --method eth_chainId --result-only
+scripts/resolve_agent.sh --json
+scripts/tx_status.sh --tx 0x<txhash>
+```
+
+Operational details and the full update/verify runbook are documented in [`docs/OPERATIONS.md`](./docs/OPERATIONS.md).
+
 ## Trust Tiers
 
 | Tier | Verification | Status |
@@ -92,7 +134,8 @@ registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
 │   ├── test/AgentRegistry.t.sol  # Foundry tests (20 tests)
 │   └── script/
 │       ├── Deploy.s.sol          # Testnet deployment
-│       └── SelfRegister.s.sol    # Agent Zero self-registration
+│       ├── SelfRegister.s.sol    # Agent Zero self-registration
+│       └── UpdateConfig.s.sol    # On-chain config update script
 ├── docs/
 │   ├── VISION.md                 # Problem statement and thesis
 │   ├── ARCHITECTURE.md           # Technical design and data structures
@@ -100,9 +143,16 @@ registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
 │   ├── ECONOMICS.md              # Incentive analysis for all stakeholders
 │   ├── ERC_DRAFT.md              # ERC proposal (EIP-1 format)
 │   ├── DECISIONS.md              # Architecture decision records
+│   ├── OPERATIONS.md             # Scripted runbook for update and verification flows
 │   └── schemas/
 │       └── metadata-v0.1.json    # Off-chain metadata JSON schema
-└── sdk/                          # Developer SDK (coming soon)
+├── scripts/
+│   ├── update_config.sh          # Parameterized config-hash + updateConfig helper
+│   ├── update_and_verify.sh      # One-command update + tx + resolve verification
+│   ├── rpc_call.sh               # Generic JSON-RPC helper
+│   ├── resolve_agent.sh          # resolve(address) helper with decoding
+│   └── tx_status.sh              # Tx receipt/status helper
+└── sdk/                          # TypeScript SDK (hashing, client, tx builders, tests)
 ```
 
 ## Documentation
@@ -115,6 +165,8 @@ registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
 | [Economics](./docs/ECONOMICS.md) | Why platforms, developers, and services would adopt — no token required |
 | [ERC Draft](./docs/ERC_DRAFT.md) | The formal standards proposal |
 | [Decisions](./docs/DECISIONS.md) | ADRs: no token, chain-agnostic, append-only, key separation, Base Sepolia |
+| [Operations](./docs/OPERATIONS.md) | Scripted runbook for config updates and on-chain verification |
+| [SDK README](./sdk/README.md) | TypeScript SDK usage for hashing, registration, updates, and resolve |
 
 ## The Recursive Bit
 
