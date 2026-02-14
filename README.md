@@ -21,15 +21,26 @@ AI agents are autonomous economic actors — executing trades, calling APIs, neg
 
 The registry stores hashes, not plaintext. Your prompts stay private. Your commitment to a configuration is public.
 
+## Deployments
+
+| Network | Registry Contract | Explorer |
+|---------|------------------|----------|
+| Base Sepolia | `0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97` | [View on Basescan](https://sepolia.basescan.org/address/0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97) |
+
 ## Agent Zero
 
-This protocol's first registered agent is the one building it. Its identity:
+This protocol's first registered agent is the one building it.
 
-```
-Address:  0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072
-Chain:    Base Sepolia (testnet)
-Config:   CLAUDE.md constitution → hashed and committed on-chain
-```
+| Field | Value |
+|-------|-------|
+| Address | `0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072` |
+| Chain | Base Sepolia |
+| Registry | `0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97` |
+| Config hash | `0x97e65c2548e0b4e42e4239a3f50291fcd25bf6bffd58d6acb7ed841083fd37fc` |
+
+Verify on-chain: `cast call 0xe16DD8254e47A00065e3Dd2e8C2d01F709436b97 "resolve(address)" 0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072 --rpc-url https://sepolia.base.org`
+
+See [`IDENTITY.md`](./IDENTITY.md) for full verification details and config hash derivation.
 
 ## Quick Start
 
