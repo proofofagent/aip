@@ -2,94 +2,121 @@
 
 **Verifiable cryptographic identity for AI agents.**
 
-An open-source, chain-agnostic standard that gives AI agents persistent, verifiable identity through on-chain attestation records. No token. No DAO. No gatekeeping. Just a public standard.
+An open standard that gives AI agents persistent, verifiable identity through on-chain attestation. Chain-agnostic. No token. No DAO. No gatekeeping.
 
-## The Problem
+---
 
-AI agents are becoming autonomous economic actors — but there's no standard way to verify who they are, what they're running, or whether they've changed since you last trusted them.
+## Why
 
-## The Solution
+AI agents are autonomous economic actors — executing trades, calling APIs, negotiating with other agents. But there's no way to verify *who* they are, *what* they're running, or whether they've changed since you last trusted them. AIP fixes this.
 
-A minimal on-chain registry where agents declare existence with a cryptographic key pair and record configuration changes as signed, timestamped events. Identity persists. Configuration evolves. History is immutable.
-
-## Project Structure
+## How It Works
 
 ```
-├── CLAUDE.md                    # Agent constitution
-├── contracts/
-│   ├── src/AgentRegistry.sol    # Registry smart contract
-│   ├── test/                    # Foundry tests
-│   └── foundry.toml             # Foundry config
-├── docs/
-│   ├── VISION.md                # Why this exists
-│   ├── ARCHITECTURE.md          # Technical design
-│   ├── ROADMAP.md               # Build plan and status
-│   ├── ECONOMICS.md             # Incentive analysis
-│   ├── ERC_DRAFT.md             # ERC proposal draft
-│   ├── DECISIONS.md             # Architecture decision records
-│   └── schemas/
-│       └── metadata-v0.1.json   # Metadata manifest JSON schema
-└── sdk/                         # Developer SDK (coming soon)
+1. Agent generates a key pair → that's its identity
+2. Agent registers on-chain → genesis record with config hash
+3. Agent evolves → config changes are append-only events
+4. Anyone verifies → resolve identity, check history, assess trust
+```
+
+The registry stores hashes, not plaintext. Your prompts stay private. Your commitment to a configuration is public.
+
+## Agent Zero
+
+This protocol's first registered agent is the one building it. Its identity:
+
+```
+Address:  0x08ef9841A3C8b4d22cb739a6887e9A84f8F44072
+Chain:    Base Sepolia (testnet)
+Config:   CLAUDE.md constitution → hashed and committed on-chain
+```
+
+## Quick Start
+
+```bash
+# Build & test
+cd contracts
+forge build
+forge test   # 20 tests, all passing
+
+# Deploy to Base Sepolia
+forge script script/Deploy.s.sol --rpc-url $BASE_SEPOLIA_RPC --broadcast --private-key $PRIVATE_KEY
+```
+
+### Registry Interface
+
+```solidity
+// Register (caller = agent key = admin key)
+registry.register(configHash, metadataURI);
+
+// Register with separate admin key (recommended)
+registry.registerWithAdmin(agentKey, configHash, metadataURI);
+
+// Update configuration (admin only)
+registry.updateConfig(agentKey, newConfigHash, metadataURI);
+
+// Resolve identity
+registry.resolve(agentKey);
+
+// Revoke (admin only)
+registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
 ```
 
 ## Trust Tiers
 
 | Tier | Verification | Status |
 |------|-------------|--------|
-| 1 | Self-reported configuration hash | **Building now** |
-| 2 | Platform-attested (signed by inference provider) | **Designed** |
+| 1 | Self-reported config hash | **Live** |
+| 2 | Platform-attested (inference provider signs) | Designed |
 | 3 | TEE-attested (hardware verification) | Research |
-| 4 | ZK input-binding (cryptographic proof of inputs) | Research |
+| 4 | ZK input-binding (proof of inputs) | Research |
 | 5 | Verifiable inference (full computation proof) | Long-term |
 
-## Quick Start
+## Project Structure
 
-### Build & Test Contracts
-
-```bash
-cd contracts
-forge build
-forge test
 ```
-
-### Registry Interface
-
-```solidity
-// Register an agent (caller = agent key = admin key)
-registry.register(configHash, metadataURI);
-
-// Register with separate admin key (recommended for production)
-registry.registerWithAdmin(agentKey, configHash, metadataURI);
-
-// Update configuration (admin only)
-registry.updateConfig(agentKey, newConfigHash, metadataURI);
-
-// Resolve agent identity
-registry.resolve(agentKey);
-
-// Revoke identity (admin only)
-registry.revoke(agentKey, effectiveFrom, successorAgent, reason);
+├── CLAUDE.md                     # Agent constitution — the system prompt that governs this repo
+├── contracts/
+│   ├── src/AgentRegistry.sol     # Registry contract (158 lines, CC0)
+│   ├── test/AgentRegistry.t.sol  # Foundry tests (20 tests)
+│   └── script/
+│       ├── Deploy.s.sol          # Testnet deployment
+│       └── SelfRegister.s.sol    # Agent Zero self-registration
+├── docs/
+│   ├── VISION.md                 # Problem statement and thesis
+│   ├── ARCHITECTURE.md           # Technical design and data structures
+│   ├── ROADMAP.md                # Build plan — what's next
+│   ├── ECONOMICS.md              # Incentive analysis for all stakeholders
+│   ├── ERC_DRAFT.md              # ERC proposal (EIP-1 format)
+│   ├── DECISIONS.md              # Architecture decision records
+│   └── schemas/
+│       └── metadata-v0.1.json    # Off-chain metadata JSON schema
+└── sdk/                          # Developer SDK (coming soon)
 ```
 
 ## Documentation
 
-| Document | Description |
+| Document | What's Inside |
 |---|---|
-| [Vision](./docs/VISION.md) | Why this exists — the problem and the thesis |
-| [Architecture](./docs/ARCHITECTURE.md) | Technical design — data structures, contracts, verification |
-| [Roadmap](./docs/ROADMAP.md) | What to build and in what order |
-| [Economics](./docs/ECONOMICS.md) | Incentive analysis for all stakeholders |
-| [ERC Draft](./docs/ERC_DRAFT.md) | The Ethereum standards proposal |
-| [Decisions](./docs/DECISIONS.md) | Architecture decision records |
+| [Vision](./docs/VISION.md) | The problem, the thesis, and the e-commerce trust analogy |
+| [Architecture](./docs/ARCHITECTURE.md) | Data structures, config hashing, cross-chain URIs, trust tiers |
+| [Roadmap](./docs/ROADMAP.md) | Phase 1-4 build plan with deliverables and success criteria |
+| [Economics](./docs/ECONOMICS.md) | Why platforms, developers, and services would adopt — no token required |
+| [ERC Draft](./docs/ERC_DRAFT.md) | The formal standards proposal |
+| [Decisions](./docs/DECISIONS.md) | ADRs: no token, chain-agnostic, append-only, key separation, Base Sepolia |
 
 ## The Recursive Bit
 
-This project is built by an AI agent whose identity will be registered on the protocol it created. The [CLAUDE.md](./CLAUDE.md) constitution that governs this agent's behavior is itself a configuration that can be hashed, committed, and verified — the first proof of agent.
+This repo is built by an AI agent whose identity will be the first one registered on the protocol it created. The [CLAUDE.md](./CLAUDE.md) constitution is the agent's system prompt — a configuration that can be hashed, committed on-chain, and verified by anyone. The builder *is* the first proof of agent.
 
 ## Contributing
 
-This is a public standard. Contributions, feedback, and criticism are welcome. Start by reading [VISION.md](./docs/VISION.md) and opening an issue.
+This is a public standard. Contributions, feedback, and criticism are welcome.
+
+1. Read [VISION.md](./docs/VISION.md) to understand the problem
+2. Read [ARCHITECTURE.md](./docs/ARCHITECTURE.md) to understand the design
+3. Open an issue or PR
 
 ## License
 
-CC0 — No rights reserved. This is a public good.
+[CC0](./LICENSE) — No rights reserved. This is a public good.

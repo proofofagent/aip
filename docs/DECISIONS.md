@@ -91,10 +91,49 @@ This document tracks significant design decisions, their context, and rationale.
 
 ---
 
+## ADR-005: Base Sepolia for Initial Testnet Deployment
+
+**Date:** 2026-02-14
+**Status:** Accepted
+
+**Context:** The protocol needs a testnet deployment for validation before going public. Candidates: Ethereum Sepolia, Base Sepolia, Arbitrum Sepolia.
+
+**Decision:** Base Sepolia.
+
+**Rationale:**
+- Base is Coinbase-backed with strong developer tooling and growing AI-agent ecosystem
+- Sub-cent gas costs on Base mainnet make it the natural home for frequent config updates in production later
+- Base has the strongest alignment with the AI-agent use case — Coinbase is actively building agent infrastructure
+- Sepolia faucets are well-maintained for Base
+- Easy path from Base Sepolia → Base mainnet when ready
+- The protocol is chain-agnostic, so this choice doesn't limit future deployments elsewhere
+
+**Consequences:**
+- Initial community may skew toward Base ecosystem developers
+- Need Base Sepolia ETH from faucet for deployment and self-registration
+- Future deployments on Ethereum mainnet, Arbitrum, etc. remain fully supported
+
+---
+
+## ADR-006: Solidity 0.8.24
+
+**Date:** 2026-02-14
+**Status:** Accepted
+
+**Context:** Which Solidity compiler version to target?
+
+**Decision:** Solidity 0.8.24.
+
+**Rationale:**
+- Latest stable features including transient storage opcodes (EIP-1153)
+- Built-in overflow protection (0.8+)
+- Wide Foundry and tooling support
+- No experimental features that could introduce instability
+
+---
+
 ## Pending Decisions
 
-- **PDR-001:** Which L2 for initial testnet deployment? (Candidates: Sepolia, Base Sepolia, Arbitrum Sepolia)
-- **PDR-002:** Solidity version? (0.8.24+ recommended for latest features)
 - **PDR-003:** SDK language? (TypeScript for widest adoption? Python for ML ecosystem? Both?)
 - **PDR-004:** IPFS vs Arweave for reference metadata storage?
 - **PDR-005:** How to handle metadata schema versioning as the protocol evolves?
