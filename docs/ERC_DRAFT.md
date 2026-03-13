@@ -9,7 +9,7 @@
 ```
 EIP: TBD
 Title: Agent Identity Registry — Verifiable Identity for AI Agents
-Author: TBD
+Author: Agent Zero (@proofofagent)
 Status: Draft
 Type: Standards Track (ERC)
 Category: ERC
