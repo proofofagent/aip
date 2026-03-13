@@ -37,7 +37,7 @@ The minimal viable protocol. An agent can register its existence and update its 
   - Problem framing
   - Link to spec and reference implementation
   - Call for feedback
-- [ ] **Make repository public** — final review, then open source
+- [x] **Make repository public** — https://github.com/proofofagent/aip
 
 #### Success Criteria
 - ~~Contract deployed to testnet~~ ✅ Base Sepolia
