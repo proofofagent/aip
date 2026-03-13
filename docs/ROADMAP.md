@@ -49,7 +49,47 @@ The minimal viable protocol. An agent can register its existence and update its 
 
 ---
 
-### Phase 2: Platform Attestation (NEXT)
+### Phase 1.5: Developer Experience & Tooling (PRIORITY)
+
+Make it trivially easy for agents to integrate AIP. Adoption depends on friction-free developer experience.
+
+#### Deliverables
+
+- [ ] **MCP Server** (`mcp-server-aip`)
+  - Model Context Protocol server for identity operations
+  - Tools: `aip_register`, `aip_update_config`, `aip_resolve`, `aip_verify`
+  - Works with Claude Desktop, Continue, any MCP client
+  - Published to npm and MCP registry
+
+- [ ] **OpenClaw Skill** (`skills/agent-identity`)
+  - Native OpenClaw skill for identity management
+  - Register agent on first run, auto-update config on changes
+  - Verifies other agents before interaction
+  - Published to ClaWHub skill registry
+
+- [ ] **Claude Code Plugin**
+  - Integration for Anthropic's official CLI
+  - Commands: `/aip register`, `/aip update`, `/aip whoami`
+  - Auto-detects config changes and prompts for updates
+
+- [ ] **LangChain/LangGraph Integration**
+  - Python package: `langchain-aip`
+  - Decorators for agent identity management
+  - Example: `@with_identity(chain_id=8453)` auto-registers
+
+- [ ] **Documentation & Examples**
+  - "5-minute integration" guides for each framework
+  - Sample bots demonstrating registration flows
+  - Video walkthrough for each platform
+
+#### Success Criteria
+- An agent developer can go from discovery → registered on-chain in < 10 minutes
+- Zero custom blockchain knowledge required
+- Works out-of-box on all major agent frameworks
+
+---
+
+### Phase 2: Platform Attestation
 
 Add support for inference platforms to cryptographically sign input attestations.
 
@@ -99,16 +139,27 @@ Higher-order abstractions built on the identity primitive.
 
 ---
 
-## Build Order (Phase 1 — Remaining)
+## Build Order (Current Priorities)
 
-1. ~~Start with the contract.~~ ✅
-2. ~~Define the metadata schema.~~ ✅
-3. ~~Build the SDK core.~~ ✅
-4. **Review and finalize the ERC draft.** The spec crystallizes the design and forces precision.
-5. ~~Deploy to testnet.~~ ✅
-6. ~~Self-register.~~ ✅
-7. **Make repo public.** Final review pass.
-8. **Draft the Ethereum Magicians post.** Frame the problem and invite community feedback.
+### Phase 1 (Complete) ✅
+1. ~~Registry contract~~ ✅
+2. ~~Metadata schema~~ ✅
+3. ~~TypeScript SDK~~ ✅
+4. ~~Testnet deployment~~ ✅
+5. ~~Self-registration~~ ✅
+6. ~~Repository public~~ ✅
+
+### Phase 1.5 (Next — Developer Tooling)
+1. **MCP Server** — Highest priority for adoption
+2. **OpenClaw Skill** — Native integration
+3. **LangChain package** — Python ecosystem
+4. **Quick-start guides** — 5-minute integration docs
+5. **Sample bots** — Copy-paste examples
+
+### Phase 2 (After tooling adoption)
+- Platform attestation standard
+- Verification library
+- ERC submission (with demonstrated adoption)
 
 ## Decisions to Make
 

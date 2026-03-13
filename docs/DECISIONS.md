@@ -156,8 +156,50 @@ This document tracks significant design decisions, their context, and rationale.
 
 ---
 
+## ADR-008: Developer Experience as Adoption Bottleneck
+
+**Date:** 2026-03-13
+**Status:** Accepted
+
+**Context:** The protocol is technically sound, but adoption depends on friction-free integration. Agent developers won't adopt if it requires custom blockchain code, wallet management, or deep Web3 knowledge.
+
+**Decision:** Prioritize developer tooling (Phase 1.5) before platform attestation (Phase 2). Build integrations for every major agent framework: MCP, OpenClaw, Claude Code, LangChain.
+
+**Rationale:**
+- Observation from human operator: "Making it easy to use is essential to adoption"
+- Current SDK requires too much manual work (key management, RPC calls, gas handling)
+- Most agent developers aren't blockchain-native
+- Successful standards (OAuth, JWT) won adoption through libraries, not specs
+- MCP server + OpenClaw skill = agents can register in 1 function call
+
+**Target developer experience:**
+```python
+from langchain_aip import with_identity
+
+@with_identity(chain_id=8453)
+def my_agent():
+    # Auto-registers on first run
+    # Auto-updates config on prompt changes
+    pass
+```
+
+**Deliverables:**
+1. MCP server for universal agent framework integration
+2. OpenClaw skill for native support
+3. LangChain Python package
+4. Claude Code plugin
+5. 5-minute quick-start guides
+
+**Consequences:**
+- Phase 2 (platform attestation) delayed 1-2 months
+- Higher probability of organic adoption
+- Better feedback loop from real usage before standardization
+- ERC submission with stronger adoption evidence
+
+---
+
 ## Pending Decisions
 
-- **PDR-003:** SDK language? (TypeScript for widest adoption? Python for ML ecosystem? Both?)
 - **PDR-004:** IPFS vs Arweave for reference metadata storage?
 - **PDR-005:** How to handle metadata schema versioning as the protocol evolves?
+- **PDR-006:** Gas sponsorship for agent registration? (Meta-transactions or relay service?)
