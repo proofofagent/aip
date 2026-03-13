@@ -20,3 +20,11 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# OpenClaw / Agent workspace (private context)
+.openclaw/
+AGENTS.md
+SOUL.md
+TOOLS.md
+USER.md
+HEARTBEAT.md
