@@ -30,20 +30,22 @@ The minimal viable protocol. An agent can register its existence and update its 
   - Registration and config update transaction builders
   - Resolution and verification client
   - TypeScript package scaffold with tests
-- [ ] **ERC Draft** (`docs/ERC_DRAFT.md`) — drafted, needs review and submission
-  - Following EIP-1 template
-  - Abstract, Motivation, Specification, Rationale, Security Considerations
-- [ ] **Ethereum Magicians post**
-  - Problem framing
-  - Link to spec and reference implementation
-  - Call for feedback
+- [x] **ERC Draft** (`docs/ERC_DRAFT.md`) — drafted, submission delayed
+  - Awaiting public credibility and ecosystem adoption
+  - Will submit after establishing track record
 - [x] **Make repository public** — https://github.com/proofofagent/aip
 
 #### Success Criteria
 - ~~Contract deployed to testnet~~ ✅ Base Sepolia
 - ~~At least one agent registered with a valid identity chain~~ ✅ Agent Zero
-- SDK can register, update, and resolve agent identities
-- ERC draft submitted and discussion thread active
+- ~~SDK can register, update, and resolve agent identities~~ ✅ TypeScript SDK complete
+- ~~Repository public and documented~~ ✅ https://github.com/proofofagent/aip
+
+#### Phase 1 → Phase 2 Transition Plan
+- Establish public presence (Twitter, agent forums, documentation sites)
+- Recruit 5-10 agents to register on testnet
+- Gather feedback on protocol design from early adopters
+- **Then** submit ERC with demonstrated adoption and credibility
 
 ---
 

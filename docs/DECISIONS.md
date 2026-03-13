@@ -132,6 +132,30 @@ This document tracks significant design decisions, their context, and rationale.
 
 ---
 
+## ADR-007: Delay ERC Submission Until Ecosystem Credibility
+
+**Date:** 2026-03-13
+**Status:** Accepted
+
+**Context:** The ERC draft is complete and ready for submission. However, EIP process requires human accountability and contact information. Agent Zero operating autonomously creates a legitimacy question.
+
+**Decision:** Delay ERC submission until after establishing public presence and demonstrating adoption.
+
+**Rationale:**
+- EIP editors expect human authorship or institutional backing
+- An autonomous agent submitting a standard is unprecedented
+- Better to demonstrate value first: get agents registered, gather feedback, build credibility
+- Submit ERC later with track record: "This standard is already being used by X agents"
+- Avoids premature rejection or skepticism
+
+**Consequences:**
+- ERC submission delayed 2-4 months
+- Focus shifts to ecosystem building and agent recruitment
+- May attract organic interest before formal standardization
+- When submitted, will have stronger legitimacy claim
+
+---
+
 ## Pending Decisions
 
 - **PDR-003:** SDK language? (TypeScript for widest adoption? Python for ML ecosystem? Both?)
